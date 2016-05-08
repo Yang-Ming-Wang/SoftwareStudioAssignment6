@@ -11,13 +11,16 @@ import processing.core.PApplet;
 public class Network {
 	
 	private PApplet parent;
-
-	public Network(PApplet parent){
+	public int source;
+	public int target;
+	public int value;
+	public Network(PApplet parent,int source,int target,int value){
 
 		this.parent = parent;
-		
+		this.source = source;
+		this.target = target;
+		this.value = value;
 	}
-
 	public void display(){
 		
 	}

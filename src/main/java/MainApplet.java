@@ -18,6 +18,7 @@ public class MainApplet extends PApplet{
 	private JSONArray nodes, links;
 	private char episode = '1';
 	private ArrayList<Character> characters = new ArrayList<Character>();
+	private ArrayList<Network> network = new ArrayList<Network>();
 	private final static int width = 1200, height = 650;
 	
 	public void setup() {
@@ -31,6 +32,15 @@ public class MainApplet extends PApplet{
 	public void draw() {
 		for(Character ch: characters)
 			ch.display();
+		for(Network net: network){
+			Character source = characters.get(net.source);
+			Character target = characters.get(net.target);
+			if(source.isSelect && target.isSelect){
+				stroke(0);
+				strokeWeight(net.value);
+				line(source.x,source.y,target.x,target.y);
+			}
+		}
 	}
 
 	private void loadData(){
@@ -58,7 +68,15 @@ public class MainApplet extends PApplet{
 			characters.add(new Character(this,char_name,char_value,char_colour,char_x,char_y));
 		}
 		
-		
+		int source;
+		int target;
+		int value;
+		for (i = 0;i < links.size();i++){
+			source = links.getJSONObject(i).getInt("source");
+			target = links.getJSONObject(i).getInt("target");
+			value = links.getJSONObject(i).getInt("value");
+			network.add(new Network(this,source,target,value));
+		}
 	}
 
 }

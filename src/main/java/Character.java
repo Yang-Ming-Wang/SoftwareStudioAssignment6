@@ -12,7 +12,8 @@ public class Character {
 	private String name;
 	private int value;
 	private int colour;
-	private int x,y;
+	public int x,y;
+	public boolean isSelect;
 	public Character(MainApplet parent,String name,int value,int colour,int x,int y){
 
 		this.parent = parent;
@@ -21,10 +22,12 @@ public class Character {
 		this.colour = colour;
 		this.x = x;
 		this.y = y;
+		this.isSelect = false;
 	}
 
 	public void display(){
 		parent.fill(colour);
+		parent.noStroke();
 		parent.arc(x, y, 30, 30, 0f, 2*3.14f);
 	}
 	
