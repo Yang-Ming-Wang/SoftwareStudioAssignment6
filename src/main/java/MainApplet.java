@@ -42,7 +42,7 @@ public class MainApplet extends PApplet{
 		
 		cp5.getController("ClearBtn").getCaptionLabel().setFont(cfont);
 		cp5.getController("ClearBtn").setColorBackground(color(35,180,75));
-		//cp5.getController("buttonA").getCaptionLabel().setColor(color(0,255,0));
+
 		smooth();
 		loadData();
 		
@@ -66,9 +66,11 @@ public class MainApplet extends PApplet{
 		}
 		noFill();
 		stroke(0,0,0);
-		arc(700, 300, 500, 500, 0f, 2*3.14f);
+		arc(700, 320, 500, 500, 0f, 2*3.14f);
 		
-		
+		textSize(36);
+		fill(185,120,90);
+		text("Star Wars " + episode,350,0,200,200);
 	}
 
 	private void loadData(){
