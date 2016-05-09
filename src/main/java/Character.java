@@ -28,7 +28,14 @@ public class Character {
 	public void display(){
 		parent.fill(colour);
 		parent.noStroke();
-		parent.arc(x, y, 30, 30, 0f, 2*3.14f);
+		if (parent.mouseX <= x+30 && parent.mouseX >= x-30
+			&& parent.mouseY <= y+30 && parent.mouseY >= y-30) {
+			parent.arc(x, y, 50, 50, 0f, 2*3.14f);
+			parent.fill(0,0,0);
+			parent.textSize(24);
+			parent.text(name, x, y-50, 120, 40);
+		} else
+			parent.arc(x, y, 30, 30, 0f, 2*3.14f);
 	}
 	
 }

@@ -30,6 +30,7 @@ public class MainApplet extends PApplet{
 	}
 
 	public void draw() {
+		background(255,255,255);
 		for(Character ch: characters)
 			ch.display();
 		for(Network net: network){
@@ -63,8 +64,8 @@ public class MainApplet extends PApplet{
 			char_name = nodes.getJSONObject(i).getString("name");
 			char_value = nodes.getJSONObject(i).getInt("value");
 			char_colour = unhex(nodes.getJSONObject(i).getString("colour").substring(1, 9));
-			char_x = 50+(i/10)*50;
-			char_y = (i%10)*50+50;
+			char_x = 50+(i/10)*70;
+			char_y = (i%10)*70+50;
 			characters.add(new Character(this,char_name,char_value,char_colour,char_x,char_y));
 		}
 		
