@@ -48,8 +48,18 @@ public class MainApplet extends PApplet{
 		
 	}
 	public void ClearBtn(){
-		for(Character ch: characters)
-			ch.resetPos();
+		boolean allclean = true;
+		for(Character ch: characters){
+			if(ch.resetPos())
+				allclean = false;
+		}
+
+		if (allclean && episode < '7'){
+			episode = (char)(episode + 1);
+			characters.clear();
+			network.clear();
+			loadData();
+		}
 	}
 	public void draw() {
 		background(255,255,255);

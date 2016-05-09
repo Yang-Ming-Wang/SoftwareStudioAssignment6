@@ -29,9 +29,13 @@ public class Character {
 		this.isSelect = false;
 		this.onCircle = false;
 	}
-	public void resetPos(){
-		x = originX;
-		y = originY;
+	public boolean resetPos(){
+		if(x != originX || y != originY){
+			x = originX;
+			y = originY;
+			return true;
+		}
+		return false;
 	}
 	public boolean isHovered(){
 		if (parent.mouseX <= x+30 && parent.mouseX >= x-30
