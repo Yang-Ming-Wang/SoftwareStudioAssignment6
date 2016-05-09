@@ -14,6 +14,7 @@ public class Character {
 	private int colour;
 	public int x,y;
 	public boolean isSelect;
+	public boolean onCircle;
 	public Character(MainApplet parent,String name,int value,int colour,int x,int y){
 
 		this.parent = parent;
@@ -23,13 +24,19 @@ public class Character {
 		this.x = x;
 		this.y = y;
 		this.isSelect = false;
+		this.onCircle = false;
 	}
-
+	public boolean isHovered(){
+		if (parent.mouseX <= x+30 && parent.mouseX >= x-30
+			&& parent.mouseY <= y+30 && parent.mouseY >= y-30)
+		return true;
+		else
+			return false;
+	}
 	public void display(){
 		parent.fill(colour);
 		parent.noStroke();
-		if (parent.mouseX <= x+30 && parent.mouseX >= x-30
-			&& parent.mouseY <= y+30 && parent.mouseY >= y-30) {
+		if (isHovered()) {
 			parent.arc(x, y, 50, 50, 0f, 2*3.14f);
 			parent.fill(0,0,0);
 			parent.textSize(24);

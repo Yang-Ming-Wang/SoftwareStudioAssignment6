@@ -19,6 +19,7 @@ public class MainApplet extends PApplet{
 	private char episode = '1';
 	private ArrayList<Character> characters = new ArrayList<Character>();
 	private ArrayList<Network> network = new ArrayList<Network>();
+	private int noOfselect = 0;
 	private final static int width = 1200, height = 650;
 	
 	public void setup() {
@@ -36,12 +37,17 @@ public class MainApplet extends PApplet{
 		for(Network net: network){
 			Character source = characters.get(net.source);
 			Character target = characters.get(net.target);
-			if(source.isSelect && target.isSelect){
+			if(source.onCircle && target.onCircle){
 				stroke(0);
 				strokeWeight(net.value);
 				line(source.x,source.y,target.x,target.y);
 			}
 		}
+		noFill();
+		stroke(0,0,0);
+		arc(700, 300, 500, 500, 0f, 2*3.14f);
+		
+		
 	}
 
 	private void loadData(){
@@ -77,6 +83,34 @@ public class MainApplet extends PApplet{
 			target = links.getJSONObject(i).getInt("target");
 			value = links.getJSONObject(i).getInt("value");
 			network.add(new Network(this,source,target,value));
+		}
+	}
+	public void mousePressed(){
+		int i;
+		for (i = 0;i< nodes.size();i++){
+			if(noOfselect == 0 && characters.get(i).isHovered()){
+				noOfselect = noOfselect + 1;
+				characters.get(i).isSelect = true;
+			}
+				
+		}
+	}
+	public void mouseDragged() {
+		int i;
+		for (i = 0;i< nodes.size();i++){
+			if (characters.get(i).isSelect){
+				characters.get(i).x = mouseX;
+				characters.get(i).y = mouseY;
+			}
+				
+		}
+	}
+	public void mouseReleased() {
+		int i;
+		noOfselect = 0;
+		for (i = 0;i< nodes.size();i++){
+			if(characters.get(i).isSelect)
+				characters.get(i).isSelect = false;
 		}
 	}
 
