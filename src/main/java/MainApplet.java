@@ -1,10 +1,16 @@
 package main.java;
 
 import processing.core.PApplet;
+import processing.core.PFont;
+
+import java.awt.Color;
 import java.lang.StringBuilder;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 import java.util.ArrayList;
+
+import controlP5.ControlFont;
+import controlP5.ControlP5;
 
 /**
 * This class is for sketching outcome using Processing
@@ -20,16 +26,31 @@ public class MainApplet extends PApplet{
 	private ArrayList<Character> characters = new ArrayList<Character>();
 	private ArrayList<Network> network = new ArrayList<Network>();
 	private int noOfselect = 0;
+	private ControlP5 cp5;
 	private final static int width = 1200, height = 650;
 	
 	public void setup() {
 
 		size(width, height);
+		
+		cp5 = new ControlP5(this); 
+		cp5.addButton("ClearBtn")
+		.setLabel("Clear").setPosition(960, 100).setSize(200, 50); 
+		
+		PFont pfont = createFont("Arial",20,true); // use true/false for smooth/no-smooth
+		ControlFont cfont = new ControlFont(pfont,40);
+		
+		cp5.getController("ClearBtn").getCaptionLabel().setFont(cfont);
+		cp5.getController("ClearBtn").setColorBackground(color(35,180,75));
+		//cp5.getController("buttonA").getCaptionLabel().setColor(color(0,255,0));
 		smooth();
 		loadData();
 		
 	}
-
+	public void ClearBtn(){
+		for(Character ch: characters)
+			ch.resetPos();
+	}
 	public void draw() {
 		background(255,255,255);
 		for(Character ch: characters)
@@ -65,13 +86,12 @@ public class MainApplet extends PApplet{
 		int char_colour;
 		int char_x;
 		int char_y;
-		
 		for (i = 0;i < nodes.size();i++){
 			char_name = nodes.getJSONObject(i).getString("name");
 			char_value = nodes.getJSONObject(i).getInt("value");
 			char_colour = unhex(nodes.getJSONObject(i).getString("colour").substring(1, 9));
 			char_x = 50+(i/10)*70;
-			char_y = (i%10)*70+50;
+			char_y = (i%10)*60+50;
 			characters.add(new Character(this,char_name,char_value,char_colour,char_x,char_y));
 		}
 		
@@ -86,31 +106,26 @@ public class MainApplet extends PApplet{
 		}
 	}
 	public void mousePressed(){
-		int i;
-		for (i = 0;i< nodes.size();i++){
-			if(noOfselect == 0 && characters.get(i).isHovered()){
+		for(Character ch: characters){
+			if(noOfselect == 0 && ch.isHovered()){
 				noOfselect = noOfselect + 1;
-				characters.get(i).isSelect = true;
+				ch.isSelect = true;
 			}
-				
 		}
 	}
 	public void mouseDragged() {
-		int i;
-		for (i = 0;i< nodes.size();i++){
-			if (characters.get(i).isSelect){
-				characters.get(i).x = mouseX;
-				characters.get(i).y = mouseY;
+		for(Character ch: characters){
+			if (ch.isSelect){
+				ch.x = mouseX;
+				ch.y = mouseY;
 			}
-				
 		}
 	}
 	public void mouseReleased() {
-		int i;
 		noOfselect = 0;
-		for (i = 0;i< nodes.size();i++){
-			if(characters.get(i).isSelect)
-				characters.get(i).isSelect = false;
+		for(Character ch: characters){
+			if (ch.isSelect)
+				ch.isSelect = false;
 		}
 	}
 

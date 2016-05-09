@@ -12,6 +12,7 @@ public class Character {
 	private String name;
 	private int value;
 	private int colour;
+	public int originX,originY;
 	public int x,y;
 	public boolean isSelect;
 	public boolean onCircle;
@@ -21,15 +22,21 @@ public class Character {
 		this.name = name;
 		this.value = value;
 		this.colour = colour;
+		this.originX = x;
+		this.originY = y;
 		this.x = x;
 		this.y = y;
 		this.isSelect = false;
 		this.onCircle = false;
 	}
+	public void resetPos(){
+		x = originX;
+		y = originY;
+	}
 	public boolean isHovered(){
 		if (parent.mouseX <= x+30 && parent.mouseX >= x-30
 			&& parent.mouseY <= y+30 && parent.mouseY >= y-30)
-		return true;
+			return true;
 		else
 			return false;
 	}
