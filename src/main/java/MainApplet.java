@@ -3,14 +3,11 @@ package main.java;
 import processing.core.PApplet;
 import processing.core.PFont;
 
-import java.awt.Color;
-import java.awt.geom.Arc2D;
 import java.lang.StringBuilder;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 import java.util.ArrayList;
 
-import java.util.Random;
 
 import controlP5.ControlFont;
 import controlP5.ControlP5;
@@ -29,6 +26,8 @@ public class MainApplet extends PApplet{
 	private ArrayList<Character> characters = new ArrayList<Character>();
 	private ArrayList<Network> network = new ArrayList<Network>();
 	private int noOfselect = 0;
+	private int noOnCircle = 0;
+	private int circleX = 700,circleY = 320,radius = 250;
 	private ControlP5 cp5;
 	private final static int width = 1200, height = 650;
 
@@ -50,10 +49,8 @@ public class MainApplet extends PApplet{
 		cp5.getController("ClearBtn").getCaptionLabel().setFont(cfont);
 		cp5.getController("ClearBtn").setColorBackground(color(35,180,75));
 
-		PFont addfont = createFont("Arial",20,true);
-		ControlFont addAllfont = new ControlFont(pfont,40);
 
-		cp5.getController("AddAll").getCaptionLabel().setFont(addAllfont);
+		cp5.getController("AddAll").getCaptionLabel().setFont(cfont);
 		cp5.getController("AddAll").setColorBackground(color(35,80,175));
 
 		smooth();
@@ -62,47 +59,26 @@ public class MainApplet extends PApplet{
 	}
 	public void AddAll(){
 		for(Character ch: characters){
-			if(ch.onCircle == false){
-				int cx,cy;
-				while(true){
-					Random randx = new Random();
-					Random randy = new Random();
-
-					cx = randx.nextInt(950) + 450;
-					cy = randy.nextInt(570) + 80;
-
-					int squ_cx = (cx - 700 )*(cx - 700);
-					int squ_cy = (cy - 320 )*(cy - 320);
-					if( (squ_cx + squ_cy) == 62500 )
-						break;
-				}
-
-				ch.x = cx;
-				ch.y = cy;
-
-				ch.onCircle = true;
-			}
-
+			ch.onCircle = true;
 		}
+		noOnCircle = characters.size();
+		reArrangecircle();
+		
 	}
 	public void ClearBtn(){
 		boolean allclean = true;
 		for(Character ch: characters){
+			ch.onCircle = false;
 			if(ch.resetPos())
 				allclean = false;
 		}
+		noOnCircle = 0;
 
 		if (allclean && episode < '7'){
 			episode = (char)(episode + 1);
 			characters.clear();
 			network.clear();
 			loadData();
-		}
-
-		for(Character ch: characters){
-			if(ch.onCircle == true){
-				ch.onCircle = false;
-			}
 		}
 	}
 	public void draw() {
@@ -121,7 +97,7 @@ public class MainApplet extends PApplet{
 		}
 		noFill();
 		stroke(0,0,0);
-		arc(700, 320, 500, 500, 0f, 2*3.14f);
+		arc(circleX, circleY, radius*2, radius*2, 0f, 2*3.14f);
 
 		textSize(36);
 		fill(185,120,90);
@@ -182,34 +158,26 @@ public class MainApplet extends PApplet{
 		noOfselect = 0;
 		for(Character ch: characters){
 			if (ch.isSelect){
-
-				int square_x = (700 - ch.x)*(700 - ch.x);
-				int square_y = (320 - ch.y)*(320 - ch.y);
-				if( (square_x + square_y)<= 62500 && (square_x + square_y) >= 0){
-					int cx,cy;
-					while(true){
-						Random randx = new Random();
-						Random randy = new Random();
-
-						cx = randx.nextInt(950) + 450;
-						cy = randy.nextInt(570) + 80;
-
-						int squ_cx = (cx - 700 )*(cx - 700);
-						int squ_cy = (cy - 320 )*(cy - 320);
-						if( (squ_cx + squ_cy) == 62500 )
-							break;
-					}
-
-
-					ch.x = cx;
-					ch.y = cy;
-
-					ch.onCircle = true;
-
-				}else{
-					ch.resetPos();
-				}
 				ch.isSelect = false;
+				if (ch.onCircle){
+					ch.resetPos();
+					ch.onCircle = false;
+					noOnCircle = noOnCircle - 1;
+				} else if(dist(ch.x,ch.y,circleX,circleY) <= radius){
+					noOnCircle = noOnCircle + 1;
+					ch.onCircle = true;
+					reArrangecircle();
+				}
+			}
+		}
+	}
+	public void reArrangecircle(){
+		int i = 0;
+		for(Character ch: characters){
+			if (ch.onCircle){
+				ch.x = (int)(circleX + radius*Math.cos(2*i*Math.PI/noOnCircle));
+				ch.y = (int)(circleY + radius*Math.sin(2*i*Math.PI/noOnCircle));
+				i = i + 1;
 			}
 		}
 	}
