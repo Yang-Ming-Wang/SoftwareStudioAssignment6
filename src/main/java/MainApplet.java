@@ -4,10 +4,13 @@ import processing.core.PApplet;
 import processing.core.PFont;
 
 import java.awt.Color;
+import java.awt.geom.Arc2D;
 import java.lang.StringBuilder;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 import java.util.ArrayList;
+
+import java.util.Random;
 
 import controlP5.ControlFont;
 import controlP5.ControlP5;
@@ -37,15 +40,50 @@ public class MainApplet extends PApplet{
 		cp5.addButton("ClearBtn")
 		.setLabel("Clear").setPosition(960, 100).setSize(200, 50); 
 		
+		cp5.addButton("AddAll")
+		.setLabel("AddAll").setPosition(960, 30).setSize(200, 50); 
+		
 		PFont pfont = createFont("Arial",20,true); // use true/false for smooth/no-smooth
 		ControlFont cfont = new ControlFont(pfont,40);
+		
 		
 		cp5.getController("ClearBtn").getCaptionLabel().setFont(cfont);
 		cp5.getController("ClearBtn").setColorBackground(color(35,180,75));
 
+		PFont addfont = createFont("Arial",20,true);
+		ControlFont addAllfont = new ControlFont(pfont,40);
+		
+		cp5.getController("AddAll").getCaptionLabel().setFont(addAllfont);
+		cp5.getController("AddAll").setColorBackground(color(35,80,175));
+		
 		smooth();
 		loadData();
 		
+	}
+	public void AddAll(){
+		for(Character ch: characters){
+			if(ch.onCircle == false){
+				int cx,cy;
+				while(true){
+					Random randx = new Random();
+					Random randy = new Random();
+					
+					cx = randx.nextInt(950) + 450;
+					cy = randy.nextInt(570) + 80;
+					
+					int squ_cx = (cx - 700 )*(cx - 700);
+					int squ_cy = (cy - 320 )*(cy - 320);
+					if( (squ_cx + squ_cy) == 62500 )
+						break;
+				}
+				
+				ch.x = cx;
+				ch.y = cy;
+				
+				ch.onCircle = true;
+			}
+			
+		}
 	}
 	public void ClearBtn(){
 		boolean allclean = true;
@@ -60,6 +98,12 @@ public class MainApplet extends PApplet{
 			network.clear();
 			loadData();
 		}
+		
+		for(Character ch: characters){
+			if(ch.onCircle == true){
+				ch.onCircle = false;
+			}
+		}
 	}
 	public void draw() {
 		background(255,255,255);
@@ -71,7 +115,8 @@ public class MainApplet extends PApplet{
 			if(source.onCircle && target.onCircle){
 				stroke(0);
 				strokeWeight(net.value);
-				line(source.x,source.y,target.x,target.y);
+				//line(source.x,source.y,target.x,target.y);
+				arc(source.x, source.y, target.x, target.y, 0, 90);
 			}
 		}
 		noFill();
@@ -136,8 +181,36 @@ public class MainApplet extends PApplet{
 	public void mouseReleased() {
 		noOfselect = 0;
 		for(Character ch: characters){
-			if (ch.isSelect)
+			if (ch.isSelect){
+				
+				int square_x = (700 - ch.x)*(700 - ch.x);
+				int square_y = (320 - ch.y)*(320 - ch.y);
+				if( (square_x + square_y)<= 62500 && (square_x + square_y) >= 0){
+					int cx,cy;
+					while(true){
+						Random randx = new Random();
+						Random randy = new Random();
+						
+						cx = randx.nextInt(950) + 450;
+						cy = randy.nextInt(570) + 80;
+						
+						int squ_cx = (cx - 700 )*(cx - 700);
+						int squ_cy = (cy - 320 )*(cy - 320);
+						if( (squ_cx + squ_cy) == 62500 )
+							break;
+					}
+				
+					
+					ch.x = cx;
+					ch.y = cy;
+					
+					ch.onCircle = true;
+					
+				}else{
+					ch.resetPos();
+				}
 				ch.isSelect = false;
+			}
 		}
 	}
 
