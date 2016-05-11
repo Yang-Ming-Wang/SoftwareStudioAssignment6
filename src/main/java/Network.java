@@ -22,7 +22,7 @@ public class Network {
 		this.value = value;
 	}
 	public void display(){
-		
+		//arc(source)
 	}
 	
 }

@@ -63,7 +63,7 @@ public class MainApplet extends PApplet{
 		}
 		noOnCircle = characters.size();
 		reArrangecircle();
-		
+
 	}
 	public void ClearBtn(){
 		boolean allclean = true;
